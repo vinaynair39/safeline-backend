@@ -1,0 +1,33 @@
+service: safeline-backend
+app: safeline
+org: vinaynairr39
+frameworkVersion: "2"
+
+plugins:
+  - serverless-bundle
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: ap-south-1
+  iamRoleStatements:
+    - ${file(./iam/SendMailIAM.yml):SendMailIAM}
+
+functions:
+  sendQuoteRequest:
+    handler: src/lambdas/sendQuoteRequest.handler
+    events:
+      - http:
+          method: POST
+          path: /api/quote
+          cors: true
+  sendResume:
+    handler: src/lambdas/sendResume.handler
+    events:
+      - http:
+          method: POST
+          path: /api/resume
+          cors: true
+
+linting: false
